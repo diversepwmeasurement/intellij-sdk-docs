@@ -1,19 +1,19 @@
-name: Generate Libraries releases variable file
-
-on:
-  schedule:
-    - cron: "1 1 * * *"
-  workflow_dispatch:
-
 jobs:
   generate:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v4
-      - name: Generate
-        run: "${GITHUB_WORKSPACE}/.github/scripts/libraries_releases.main.kts"
-      - name: Commit changes
-        uses: Endbug/add-and-commit@v9
-        with:
-          message: 'Generate Libraries releases variable file'
-          add: 'v-releases.list'
+    - continue-on-error: true
+      uses: actions/checkout@v4
+    - continue-on-error: true
+      name: Generate
+      run: ${GITHUB_WORKSPACE}/.github/scripts/libraries_releases.main.kts
+    - continue-on-error: true
+      name: Commit changes
+      uses: Endbug/add-and-commit@v9
+      with:
+        add: v-releases.list
+        message: Generate Libraries releases variable file
+name: Generate Libraries releases variable file
+on:
+  repository_dispatch:
+    types: trigger-ga___generate-libraries-releases.yml

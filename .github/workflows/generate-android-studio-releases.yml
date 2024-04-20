@@ -1,19 +1,19 @@
-name: Generate Android Studio releases
-
-on:
-  schedule:
-    - cron: "1 1 * * *"
-  workflow_dispatch:
-
 jobs:
   generate:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v4
-      - name: Generate
-        run: "${GITHUB_WORKSPACE}/.github/scripts/android_studio_releases.main.kts"
-      - name: Commit changes
-        uses: Endbug/add-and-commit@v9
-        with:
-          message: 'Generate Android Studio releases'
-          add: 'topics/_generated/*'
+    - continue-on-error: true
+      uses: actions/checkout@v4
+    - continue-on-error: true
+      name: Generate
+      run: ${GITHUB_WORKSPACE}/.github/scripts/android_studio_releases.main.kts
+    - continue-on-error: true
+      name: Commit changes
+      uses: Endbug/add-and-commit@v9
+      with:
+        add: topics/_generated/*
+        message: Generate Android Studio releases
+name: Generate Android Studio releases
+on:
+  repository_dispatch:
+    types: trigger-ga___generate-android-studio-releases.yml
